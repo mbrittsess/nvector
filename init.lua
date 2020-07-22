@@ -4,12 +4,42 @@
     unit_x = vec3( 1.0, 0.0, 0.0 )
 ]]
 
-local _ = require "moses"
 local unpack = unpack or table.unpack
+local pairs = pairs
 local sin, cos, atan2 = math.sin, math.cos, math.atan2
 
+--Reimplementation of moses.all but optimized for usage here
+local function all ( t, f )
+    local passed = true
+    for i = 1, #t do
+        passed = passed and f( i, t[i] )
+    end
+    return passed
+end
+
+--Reimplementation of moses.reduce but optimized for usage here
+local function reduce ( t, f, state )
+    local start_i = 1
+    if not state then 
+        state = t[1]
+        start_i = 2
+    end
+    for i = start_i, #t do
+        state = f( state, t[i] )
+    end
+    return state
+end
+
+local function rep ( value, n )
+    local ret = {}
+    for i = 1, n do
+        ret[ i ] = value
+    end
+    return ret
+end
+
 --Creates a vector constructor for vectors of a given length
-return _.memoize(function ( vec_length )
+local function create_vec_library ( vec_length )
     assert( type(vec_length) == "number", "vec_length must be a number" )
     assert( vec_length ~= math.huge and vec_length == vec_length, "vec_length must be a finite number" )
     assert( vec_length % 1.0 == 0.0, "vec_length must be an integer" )
@@ -37,7 +67,7 @@ return _.memoize(function ( vec_length )
             args = args[1]
         end
         
-        assert( _.all( args, function ( _, element )
+        assert( all( args, function ( _, element )
                 return type(element) == "number"
             end ),
             error_message
@@ -132,7 +162,7 @@ return _.memoize(function ( vec_length )
         if not (is_vec(l) and is_vec(r)) then
             return false
         else
-            return _.all( l, eq_func, l, r )
+            return all( l, eq_func, l, r )
         end
     end end
     
@@ -173,7 +203,7 @@ return _.memoize(function ( vec_length )
             return state + element^2
         end
         function method:len ( )
-            return sqrt( _.reduce( self, len_func, 0.0 ) )
+            return sqrt( reduce( self, len_func, 0.0 ) )
         end
     end
     
@@ -215,15 +245,15 @@ return _.memoize(function ( vec_length )
     -- static.all( num )
     function static.all( num )
         assert( type(num) == "number", "only accepts number argument" )
-        return setmetatable( _.rep( num, vec_length ), meta )
+        return setmetatable( rep( num, vec_length ), meta )
     end
     
     -- static.unit( axis )
     function static.unit( axis_n )
-        assert( (type(num) == "number") and (axis_n % 1.0 == 0.0) and (1.0 <= axis_n and axis_n <= vec_length ),
+        assert( (type(axis_n) == "number") and (axis_n % 1.0 == 0.0) and (1.0 <= axis_n and axis_n <= vec_length ),
             string.format( "only accepts positive integer between 1 and %i", vec_length )
         )
-        local ret = _.rep( 0.0, vec_length )
+        local ret = rep( 0.0, vec_length )
         ret[ axis_n ] = 1.0
         return setmetatable( ret, meta )
     end
@@ -238,4 +268,14 @@ return _.memoize(function ( vec_length )
     end
     
     return static
-end)
+end
+
+local created_libraries = {}
+return function ( vec_length )
+    local ret = created_libraries[ vec_length ]
+    if not ret then
+        ret = create_vec_library( vec_length )
+        created_libraries[ vec_length ] = ret
+    end
+    return ret
+end

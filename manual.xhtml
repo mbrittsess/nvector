@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>nvector Documentation</title>
+        <!--<link rel="stylesheet" type="text/css" href="./lua.css"/>-->
+        <!--<link rel="stylesheet" type="text/css" href="./manual.css"/>-->
+        <style type="text/css">
+            html {
+                background-color: #F8F8F8 ;
+            }
+
+            body {
+                background-color: #FFFFFF ;
+                color: #000000 ;
+                font-family: Helvetica, Arial, sans-serif ;
+                text-align: justify ;
+                line-height: 1.25 ;
+                margin: 16px auto ;
+                padding: 32px ;
+                border: solid #ccc 1px ;
+                border-radius: 20px ;
+                max-width: 70em ;
+                width: 90% ;
+            }
+
+            h1, h2, h3, h4 {
+                color: #000080 ;
+                font-family: Verdana, Geneva, sans-serif ;
+                font-weight: normal ;
+                font-style: normal ;
+                text-align: left ;
+            }
+
+            h1 {
+                font-size: 28pt ;
+            }
+
+            h1 img {
+                vertical-align: text-bottom ;
+            }
+
+            h2:before {
+                content: "\2756" ;
+                padding-right: 0.5em ;
+            }
+
+            a {
+                text-decoration: none ;
+            }
+
+            a:link {
+                color: #000080 ;
+            }
+
+            a:link:hover, a:visited:hover {
+                background-color: #D0D0FF ;
+                color: #000080 ;
+                border-radius: 4px ;
+            }
+
+            a:link:active, a:visited:active {
+                color: #FF0000 ;
+            }
+
+            div.menubar {
+                padding-bottom: 0.5em ;
+            }
+
+            p.menubar {
+                margin-left: 2.5em ;
+            }
+
+            .menubar a:hover  {
+                margin: -3px -3px -3px -3px ;
+                padding: 3px  3px  3px  3px ;
+                border-radius: 4px ;
+            }
+
+            :target {
+                background-color: #F0F0F0 ;
+                margin: -8px ;
+                padding: 8px ;
+                border-radius: 8px ;
+                outline: none ;
+            }
+
+            hr {
+                display: none ;
+            }
+
+            table hr {
+                background-color: #a0a0a0 ;
+                color: #a0a0a0 ;
+                border: 0 ;
+                height: 1px ;
+                display: block ;
+            }
+
+            .footer {
+                color: gray ;
+                font-size: x-small ;
+                text-transform: lowercase ;
+            }
+
+            input[type=text] {
+                border: solid #a0a0a0 2px ;
+                border-radius: 2em ;
+                background-image: url('images/search.png') ;
+                background-repeat: no-repeat ;
+                background-position: 4px center ;
+                padding-left: 20px ;
+                height: 2em ;
+            }
+
+            pre.session {
+                background-color: #F8F8F8 ;
+                padding: 1em ;
+                border-radius: 8px ;
+            }
+
+            table {
+                border: none ;
+                border-spacing: 0 ;
+                border-collapse: collapse ;
+            }
+
+            td {
+                padding: 0 ;
+                margin: 0 ;
+            }
+
+            td.gutter {
+                width: 4% ;
+            }
+
+            table.columns td {
+                vertical-align: top ;
+                padding-bottom: 1em ;
+                text-align: justify ;
+                line-height: 1.25 ;
+            }
+
+            table.book td {
+                vertical-align: top ;
+            }
+
+            table.book td.cover {
+                padding-right: 1em ;
+            }
+
+            table.book img {
+                border: solid #000080 1px ;
+            }
+
+            table.book span {
+                font-size: small ;
+                text-align: left ;
+                display: block ;
+                margin-top: 0.25em ;
+            }
+
+            p.logos a:link:hover, p.logos a:visited:hover {
+                background-color: inherit ;
+            }
+
+            img {
+                background-color: white ;
+            }
+
+            h3 code {
+                font-family: inherit ;
+                font-size: inherit ;
+            }
+
+            pre, code {
+                font-size: 12pt ;
+            }
+
+            span.apii {
+                color: gray ;
+                float: right ;
+                font-family: inherit ;
+                font-style: normal ;
+                font-size: small ;
+            }
+
+            h2:before {
+                content: "" ;
+                padding-right: 0em ;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Basic Introduction</h1>
+        <p>
+            The <code>nvector</code> library is not used directly from <code>require</code> like most libraries. When you call <code>require("nvector")</code>, instead you are returned a constructor for whichever library you want. Pass an integer to this constructor function specifying which dimension of vector you would like to work with; <code>require("nvector")(2)</code> for 2-dimensional vectors, and <code>require("nvector")(5)</code> for 5-dimensional vectors, for example.
+        </p>
+        <p>
+            Once you have the library, you may <em>call</em> the library itself to create vectors, or you can access functions of the library itself (described under <em>Static Methods</em> below)
+        </p>
+        <p><pre><code>vec3 = require("nvector")(3)
+y_unit = vec3.unit( 2 ) --> (0,1,0)
+foo = vec3( 1.0, -2.2, 5.3 )
+bar = vec3( 2.0, -5, 6.7 )
+print( foo + bar ) --> (3,-7.2,12)</code></pre>
+        </p>
+        
+        <h1>Static Methods</h1>
+            <h3>vec(n).all ( n )</h3>
+            <p>
+                Returns a vector where all elements are equal to <code>n</code>.
+            </p>
+            
+            <h3>vec(n).unit ( axis_n )</h3>
+            <p>
+                Returns a vector where the <code>axis_n</code>th element is equal to <code>1.0</code> and all other elements are equal to <code>0.0</code>.
+            </p>
+            
+            <h3>vec(2).circ ( ang, len )</h3>
+            <p>
+                Returns the cartesian vector corresponding to the circular coordinates given by angle <code>ang</code> (in radians, counter-clockwise from x-axis) and length <code>len</code>.
+            </p>
+        
+        <h1>Object Operators &amp; Methods</h1>
+            <h3>vec(n) + vec(n)</h3>
+            <p>
+                Simple vector addition.
+            </p>
+            
+            <h3>vec(n) - vec(n)</h3>
+            <p>
+                Simple vector subtraction.
+            </p>
+            
+            <h3>vec(n) * number</h3>
+            <h3>number * vec(n)</h3>
+            <p>
+                Simple vector/scalar multiplication.
+            </p>
+            
+            <h3>vec(n) / number</h3>
+            <p>
+                Simple vector-by-scalar division; equivalent to <code>vec(n) * (1.0/number).</code>
+            </p>
+            
+            <h3>vec(n) ^ number</h3>
+            <p>
+                Returns vector where each element is the corresponding element from <code>vec(n)</code>, exponentiated by <code>number</code>.
+            </p>
+            
+            <h3>-vec(n)</h3>
+            <p>
+                Simple vector inversion, equal to <code>vec(n) * -1.0</code>.
+            </p>
+            
+            <h3>vec(n) == vec(n)</h3>
+            <p>
+                Exact vector equality. Returns <code>true</code> if every element in both vectors is exactly equal.
+            </p>
+            
+            <h3><code>__tostring</code> Metamethod</h3>
+            <p>
+                Prints a simple representation of the vector.
+            </p>
+            
+            <h3>vec(n):tostring ( [ fmt ] )</h3>
+            <p>
+                Prints a representation of the string. If argument <code>fmt</code> is provided, each element will be printed with that format string as passed to <code>string.format</code>. If not provided, <code>"%g"</code> is used instead.
+            </p>
+            
+            <h3>vec(n):abs ( )</h3>
+            <p>
+                Returns vector where all elements have the absolute-value of the corresponding element from the original vector.
+            </p>
+            
+            <h3>vec(n):len ( )</h3>
+            <p>
+                Returns (scalar) length of the vector.
+            </p>
+            
+            <h3>vec(n):dot ( vec(n) )</h3>
+            <p>
+                Returns the dot-product of the two vectors.
+            </p>
+            
+            <h3>vec(3):cross ( vec(3) )</h3>
+            <p>
+                Returns the cross-product of the two (3-dimensional) vectors.
+            </p>
+            
+            <h3>vec(2):ang ( )</h3>
+            <p>
+                Returns the angle component of the circular coordinate corresponding to the vector; see <code>vec(2).circ()</code> for angle conventions.
+            </p>
+    </body>
+</html>

@@ -279,6 +279,11 @@ print( foo + bar ) --> (3,-7.2,12)</code></pre>
                 Returns (scalar) length of the vector.
             </p>
             
+            <h3>vec(n):norm ( )</h3>
+            <p>
+                Returns the normalized version of the vector; returned vector has same direction but a length of 1.0
+            </p>
+            
             <h3>vec(n):dot ( vec(n) )</h3>
             <p>
                 Returns the dot-product of the two vectors.
@@ -292,6 +297,17 @@ print( foo + bar ) --> (3,-7.2,12)</code></pre>
             <h3>vec(2):ang ( )</h3>
             <p>
                 Returns the angle component of the circular coordinate corresponding to the vector; see <code>vec(2).circ()</code> for angle conventions.
+            </p>
+            
+            <h3>vec(2):rotate ( ang )</h3>
+            <p>
+                May be extended to general <em>n</em>-dimensional vectors later.
+            </p>
+            <p>
+                Produces a new vector from the rotation of the original vector by the given amount in radians &mdash; as usual, a positive value produces a counter-clockwise rotation.
+            </p>
+            <p>
+                Argument is currently limited to values less than 1 revolution in either direction.
             </p>
     </body>
 </html>

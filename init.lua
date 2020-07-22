@@ -234,6 +234,26 @@ local function create_vec_library ( vec_length )
         end
     end
     
+    -- vec:norm()
+    function method:norm ( )
+        return self / self:len()
+    end
+    
+    -- vec:rotate( ang )
+    -- This form only valid for 2-dimensional vectors, other forms may be implemented later
+    if vec_length == 2 then
+        local whole_rev = 2*math.pi
+        function method:rotate ( ang )
+            assert( type(ang) == "number" and (-whole_rev < ang) and (ang < whole_rev), "argument must be a number less than a full revolution" )
+            local x1, y1 = self[1], self[2]
+            
+            local x2 = cos(ang)*x1 - sin(ang)*y1
+            local y2 = sin(ang)*x1 + cos(ang)*y1
+            
+            return vector_constructor ( x2, y2 )
+        end
+    end
+    
     -- vec:ang()
     -- Only valid for 2-dimensional vectors
     if vec_length == 2 then

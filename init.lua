@@ -262,6 +262,42 @@ local function create_vec_library ( vec_length )
         end
     end
     
+    -- vec(3+):truncate( n )
+    if vec_length >= 3 then
+        function method:truncate ( n )
+            assert( type(n) == "number", "n must be a number" )
+            assert( (n % 1.0 == 0.0) and (n >= 2) and (n < vec_length), "n must be an integer at least 2 and less than the length of the original vector" )
+            
+            local new_vec_create = create_vec_library( n )
+            local ret = {}
+            
+            for i = 1, n do
+                ret[i] = self[i]
+            end
+            
+            return new_vec_create( unpack( ret ) )
+        end
+    end
+    
+    -- vec(n):extend( n )
+    function method:extend ( n )
+        assert( type(n) == "number", "n must be a number" )
+        assert( (n % 1.0 == 0.0) and (n > vec_length), "n must be an integer greater than the length of the original vector" )
+        
+        local new_vec_create = create_vec_library( n )
+        local ret = {}
+        
+        for i = 1, vec_length do
+            ret[i] = self[i]
+        end
+        
+        for i = vec_length+1, n do
+            ret[i] = 0.0
+        end
+        
+        return new_vec_create( unpack( ret ) )
+    end
+    
     -- static.all( num )
     function static.all( num )
         assert( type(num) == "number", "only accepts number argument" )

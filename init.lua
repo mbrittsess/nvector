@@ -262,6 +262,22 @@ local function create_vec_library ( vec_length )
         end
     end
     
+    -- vec(3):rotate( axis[, ang ] )
+    -- Performs rotation of vector around designated axis. If ang is supplied, that is used for the amount; if not, the length of the axis vector is used for the rotation amount.
+    if vec_length == 3 then
+        function method:rotate ( axis, ang )
+            if not ang then
+                ang = axis:len()
+            end
+            
+            axis = axis:norm()
+            
+            return cos(ang)     * self
+                 + sin(ang)     * axis:cross( self )
+                 + (1-cos(ang)) * axis:dot( self ) * axis
+        end
+    end
+    
     -- vec(3+):truncate( n )
     if vec_length >= 3 then
         function method:truncate ( n )

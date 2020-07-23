@@ -310,6 +310,11 @@ print( foo + bar ) --> (3,-7.2,12)</code></pre>
                 Argument is currently limited to values less than 1 revolution in either direction.
             </p>
             
+            <h3>vec(3):rotate ( axis [, ang ] )</h3>
+            <p>
+                Rotates the vector around the vector <code>axis</code>. If <code>ang</code> is supplied, this designates the magnitude of the rotation; if not, the magnitude of the rotation is given by the magnitude of the <code>axis</code> vector.
+            </p>
+            
             <h3>vec(3+):truncate ( l )</h3>
             <p>
                 Produces a new, shorter vector of length <code>l</code> by copying over the common elements and dropping the excess ones.

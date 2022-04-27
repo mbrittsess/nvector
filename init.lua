@@ -155,16 +155,17 @@ local function create_vec_library ( vec_length )
     end end
     
     -- vec == vec
-    do local function eq_func( i, _, l, r )
-        return l[i] == r[i]
-    end
     function meta.__eq ( l, r )
         if not (is_vec(l) and is_vec(r)) then
             return false
         else
-            return all( l, eq_func, l, r )
+            local passed = true
+            for i = 1, #l do
+                passed = passed and l[i] == r[i]
+            end
+            return passed
         end
-    end end
+    end
     
     -- tostring( vec )
     function meta:__tostring ( )
